@@ -47,6 +47,21 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 app.post('/login', checkNotAuthenticated, 
 passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/'}));
 
+app.post('/register', checkNotAuthenticated, (req, res) => {
+    try {
+        const hashpassword = await bcrypt.hash(req.body.password, 10);
+        users.push({
+            id: Date.now().toString(),
+            name: req.body.name,
+            email: req.body.email,
+            password: hashpassword
+        })
+        res.redirect('/login');
+    } catch (error) {
+        console.log(error);
+        res.redirect('/register');
+    }
+})
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
