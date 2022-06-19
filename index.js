@@ -62,6 +62,13 @@ app.post('/register', checkNotAuthenticated, (req, res) => {
         res.redirect('/register');
     }
 })
+
+app.delete('/logout', (req, res) => {
+    req.logOut();
+    res.redirect('/login');
+})
+
+
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return next();
